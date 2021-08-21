@@ -9,7 +9,7 @@ app = Flask(__name__)
 s = requests.Session()
 
 API_KEY = ""
-with open('api_key.txt', 'r') as file:
+with open('./api_key.txt', 'r') as file:
     API_KEY = file.read()
 
 URL = "https://www.googleapis.com/books/v1"
