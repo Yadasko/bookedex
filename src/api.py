@@ -32,7 +32,7 @@ def get_from_isbn(isbn):
 
     if "items" in res and len(res['items']) >= 1:
         for book in res['items']:
-            b = Book.construct(json.dumps(book, indent=2))
+            b = Book.construct_from_dict(book))
             books.append(b)
             print(b.toString())
             return(b.toString())
@@ -42,4 +42,4 @@ def get_from_isbn(isbn):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug = True)
