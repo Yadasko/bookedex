@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'bookedex_api.apps.BookedexApiConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
