@@ -33,7 +33,7 @@ class CollectedBook(models.Model):
     hunter = models.ForeignKey(BookHunter, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "%s: %s" % (self.hunter.username, self.book.name)
+        return "%s: %s" % (self.hunter.username, self.book.title)
 
 
 class WantedBook(models.Model):
