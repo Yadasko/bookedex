@@ -16,13 +16,20 @@ class BookSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = Book
-        fields = ('id', 'title', 'subtitle', 'authors', 'ISBN_13')
+        fields = ('id', 'title', 'subtitle', 'authors', )
+
+
+class BookSerializerWithoutAuthor(serializers.HyperlinkedModelSerializer):
+
+    class Meta:
+        model = Book
+        fields = ('id', 'title', 'subtitle', )
 
 
 class CollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CollectedBook
-        fields = ('hunter', 'book')
+        fields = ('book', )
 
-    book = BookSerializer(many=False)
+    book = BookSerializerWithoutAuthor(many=False)
