@@ -1,0 +1,25 @@
+version: "3.9"
+   
+services:
+  db:
+    image: mariadb
+    volumes: 
+      - "/var/lib/mysql/data"
+      - "/var/lib/mysql/logs"
+      - ./sql_conf:/etc/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "TH1S_1S_M4R14_DB_P4ssW0rD!!"
+      MYSQL_DATABASE: "bookedex"
+      MYSQL_USER: "bookmaster"
+      MYSQL_PASSWORD: "__4dmin_p4ssW0Rd_S0_S3CUR3"
+  web:
+    image: django_bookedex
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ../src:/code
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
