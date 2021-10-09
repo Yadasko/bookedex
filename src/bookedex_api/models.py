@@ -13,12 +13,12 @@ class Author(models.Model):
 class Book(models.Model):
     id = models.CharField(max_length=45, primary_key=True)
     title = models.CharField(max_length=45)
-    subtitle = models.CharField(max_length=45, null=True)
-    ISBN_13 = models.CharField(max_length=13, null=True)
+    subtitle = models.CharField(max_length=45, null=True, blank=True)
+    ISBN_13 = models.CharField(max_length=13, null=True, blank=True)
     authors = models.ManyToManyField(Author)
 
     def __str__(self):
-        return f"@{self.id}: {self.title} - {self.subtitle} (ISBN_13: {self.ISBN_13}"
+        return f"@{self.id}: {self.title} - {self.subtitle} (ISBN_13: {self.ISBN_13})"
 
 
 class BookHunter(models.Model):
