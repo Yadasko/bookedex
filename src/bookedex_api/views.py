@@ -3,13 +3,14 @@ from django.http import HttpResponse, JsonResponse
 from rest_framework import viewsets
 from rest_framework.decorators import api_view
 
-from .serializers import BookSerializer, AuthorSerializer, CollectionSerializer
+from .serializers import BookSerializer, AuthorSerializer, CollectionSerializer, CollectedBookData
 from .models import Book
 from .models import Author
 from .models import CollectedBook
 from .models import BookHunter
 
 from .helpers.data_fetcher import *
+from .helpers.api_outputs import *
 
 
 # TODO: Find out difference between functions and classes in views
@@ -38,9 +39,24 @@ def collection_list(request, hunter):
             if not isAlreadyCollected(hunter_instance, book_instance):
                 CollectedBook.objects.create(
                     book=book_instance, hunter=hunter_instance)
+            else:
+                return JsonResponse({'message': "You already have collected this book",
+                                     'book': book}, safe=False)
 
         # TODO: Return json data with number of added books instead
         return JsonResponse(books, safe=False)
+
+
+@api_view(["GET"])
+def getCollectedBookInfo(request, hunter, book_id):
+
+    book = CollectedBook.objects.filter(
+        book__id=book_id, hunter__username=hunter)
+
+    if not book.exists():
+        return JsonResponse(createReturn(f"The book {book_id} is not known."), safe=False)
+
+    return JsonResponse(CollectedBookData(book.first(), many=False).data, safe=False)
 
 
 class BookViewSet(viewsets.ModelViewSet):

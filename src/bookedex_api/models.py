@@ -31,6 +31,7 @@ class BookHunter(models.Model):
 class CollectedBook(models.Model):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
     hunter = models.ForeignKey(BookHunter, on_delete=models.CASCADE)
+    collectedAt = models.DateTimeField(auto_created=True)
 
     def __str__(self):
         return "%s: %s" % (self.hunter.username, self.book.title)

@@ -33,3 +33,11 @@ class CollectionSerializer(serializers.ModelSerializer):
         fields = ('book', )
 
     book = BookSerializerWithoutAuthor(many=False)
+
+
+class CollectedBookData(serializers.ModelSerializer):
+    class Meta:
+        model = CollectedBook
+        fields = ('book', )
+
+    book = BookSerializer(many=False)
