@@ -27,6 +27,7 @@ def createBook(book_data):
     b = Book(**book_data)
     b.save()
     b.authors.set(authors)
+    b.save()
     return b
 
 

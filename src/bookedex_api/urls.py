@@ -13,5 +13,6 @@ urlpatterns = [
     path('', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     path('<str:hunter>/collection/', views.collection_list),
-    path('<str:hunter>/collection/<str:book_id>/', views.getCollectedBookInfo)
+    path('<str:hunter>/collection/<str:book_id>/', views.getCollectedBookInfo),
+    path('<str:hunter>/<str:ISBN>/', views.getBookFromISBN)
 ]

@@ -18,7 +18,11 @@ class Book(models.Model):
     authors = models.ManyToManyField(Author)
 
     def __str__(self):
-        return f"@{self.id}: {self.title} - {self.subtitle} (ISBN_13: {self.ISBN_13})"
+        authors = ""
+        for author in self.authors.all():
+            authors += "" + author.name
+
+        return f"@{self.id}: {self.title} - {self.subtitle} (ISBN_13: {self.ISBN_13}) - Authors: {authors}"
 
 
 class BookHunter(models.Model):

@@ -7,10 +7,13 @@ from .serializers import BookSerializer, AuthorSerializer, CollectionSerializer,
 from .models import Book
 from .models import Author
 from .models import CollectedBook
+from .models import WantedBook
 from .models import BookHunter
 
 from .helpers.data_fetcher import *
 from .helpers.api_outputs import *
+
+from .wrappers.google_books import *
 
 
 # TODO: Find out difference between functions and classes in views
@@ -57,6 +60,51 @@ def getCollectedBookInfo(request, hunter, book_id):
         return JsonResponse(createReturn(f"The book {book_id} is not known."), safe=False)
 
     return JsonResponse(CollectedBookData(book.first(), many=False).data, safe=False)
+
+
+@api_view(["GET"])
+def getBookFromISBN(request, hunter, ISBN):
+
+    # 1. Check if book is already known
+    #   if so, return it
+    # 2. Retrieve from Google Books the data
+    # 3. Check if book is in a wanted list or collected
+
+    ISBN = ISBN.strip().replace('-', '')
+
+    book = Book.objects.filter(ISBN_13=ISBN).first()
+
+    if book == None:
+        GBook = GoogleBooksWrapper()
+        book = GBook.get_from_ISBN(ISBN)
+
+        book = getBook(book)
+
+    isCollected = False
+    isWanted = False
+
+    # Some data related to collection
+    collectedAt = None
+
+    collection = CollectedBook.objects.filter(
+        book=book, hunter__username=hunter)
+
+    wishlist = WantedBook.objects.filter(book=book, hunter__username=hunter)
+
+    # Check if is in collection or wishlist
+    if collection:
+        isCollected = True
+        collectedAt = collection.first().collectedAt
+
+    if wishlist:
+        isWanted = True
+
+    result = BookSerializer(book, many=False).data
+    result['collected'] = isCollected
+    result['collectedAt'] = "N/A" if collectedAt == None else collectedAt
+    result['wanted'] = isWanted
+
+    return JsonResponse(result, safe=False)
 
 
 class BookViewSet(viewsets.ModelViewSet):
